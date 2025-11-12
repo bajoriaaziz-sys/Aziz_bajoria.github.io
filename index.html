@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Моё ожившее фото</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      height: 100%;
+      overflow: hidden;
+    }
+    video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+    .hint {
+      position: fixed;
+      left: 10px;
+      bottom: 10px;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <video id="v" autoplay loop playsinline muted>
+    <source src="magic.mp4" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+  </video>
+  <div class="hint">Если нет звука — тапни по экрану.</div>
+
+  <script>
+    const v = document.getElementById('v');
+    const enableSound = () => { v.muted = false; v.play().catch(()=>{}); };
+    document.addEventListener('click', enableSound, { once:true });
+    document.addEventListener('touchstart', enableSound, { once:true });
+  </script>
+</body>
+</html>
