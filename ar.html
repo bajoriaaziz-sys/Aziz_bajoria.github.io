@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>AR-фото — оживающая картинка</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+      body { margin: 0; overflow: hidden; }
+      .hint {
+        position: fixed;
+        left: 10px;
+        bottom: 10px;
+        color: #fff;
+        font-family: system-ui, sans-serif;
+        font-size: 13px;
+        opacity: 0.85;
+        z-index: 9999;
+        text-shadow: 0 0 4px #000;
+      }
+    </style>
+
+    <!-- A-Frame и AR.js (NFT) -->
+    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar-nft.js"></script>
+  </head>
+
+  <body>
+    <!-- Видеотекстура. Берём тот же magic.mp4, что и на главной -->
+    <video id="magicVideo"
+           src="magic.mp4"
+           preload="auto"
+           loop
+           crossorigin="anonymous"
+           playsinline
+           webkit-playsinline
+           muted></video>
+
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      renderer="precision: mediump; antialias: true; alpha: true"
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+
+      <!-- NFT-маркер: target.* лежит в папке /marker -->
+      <a-nft
+        type="nft"
+        url="./marker/target"
+        smooth="true"
+        smoothCount="8"
+        smoothTolerance="0.01"
+        smoothThreshold="8">
+
+        <!-- Плоскость с видео. Подбери размер width/height под пропорции фото -->
+        <a-video
+          src="#magicTex"
+          width="1.2"
+          height="0.675"
+          position="0 0 0">
+        </a-video>
+
+      </a-nft>
+
+      <a-entity camera></a-entity>
+
+      <a-assets>
+        <video id="magicTex"
+               src="magic.mp4"
+               preload="auto"
+               loop="true"
+               crossorigin="anonymous"
+               playsinline
+               webkit-playsinline></video>
+      </a-assets>
+    </a-scene>
+
+    <div class="hint">
+      Наведи камеру на распечатанное фото.<br>
+      Если нет звука — тапни по экрану.
+    </div>
+
+    <script>
+      const vid = document.getElementById('magicTex');
+      const tryPlay = () => { vid.play().catch(()=>{}); };
+      document.addEventListener('DOMContentLoaded', tryPlay);
+
+      const enableSound = () => {
+        vid.muted = false;
+        tryPlay();
+      };
+      document.addEventListener('click', enableSound, { once:true });
+      document.addEventListener('touchstart', enableSound, { once:true });
+    </script>
+  </body>
+</html>
